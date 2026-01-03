@@ -2,6 +2,8 @@
 
 Multi-Strategy Detection | 6 AI Models | 99.92% Accuracy
 
+### 👥 Group — Tanya · Bibek · Chris · Sangam  
+
 ## 🎯 Project Overview
 
 An AI-powered network intrusion detection system that analyzes network traffic in real-time to identify cyber threats with 99.92% accuracy.
