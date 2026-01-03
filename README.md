@@ -35,7 +35,8 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 
 ## 🚀 Live Demo
 
-<img width="1678" height="1644" alt="image" src="https://github.com/user-attachments/assets/17a5d18c-41d2-4b73-8938-06a0b396d670" />
+<img width="2875" height="1635" alt="image" src="https://github.com/user-attachments/assets/538b7279-4303-419c-9729-e3d222ea42d3" />
+
 
 
 ## 💻 Technical Stack
