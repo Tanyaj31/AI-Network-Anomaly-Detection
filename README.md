@@ -96,29 +96,29 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 
 🎯 Performance Metrics
 
-✅ 99.92% Accuracy - Industry-leading detection rate (XGBoost)
-✅ 99.86% Ensemble Accuracy - Multi-model voting system
-✅ <2% False Positives - Minimizes alert fatigue
-✅ 5-Minute Training - Complete pipeline on 2.5M samples
+- ✅ 99.92% Accuracy - Industry-leading detection rate (XGBoost)
+- ✅ 99.86% Ensemble Accuracy - Multi-model voting system
+- ✅ <2% False Positives - Minimizes alert fatigue
+- ✅ 5-Minute Training - Complete pipeline on 2.5M samples
 
 🔬 Research Innovation
 
-✅ Novel DoS Pattern Discovery - Identified 210× amplification signature
-✅ Zero-Day Detection - 97.73% accuracy on unknown attacks
-✅ Three-Strategy Architecture - Supervised + Unsupervised + Ensemble
+- ✅ Novel DoS Pattern Discovery - Identified 210× amplification signature
+- ✅ Zero-Day Detection - 97.73% accuracy on unknown attacks
+- ✅ Three-Strategy Architecture - Supervised + Unsupervised + Ensemble
 
 🚀 Technical Capabilities
 
-✅ Multi-Format Processing - CSV, PCAP, JSON, LOG support
-✅ Real-Time Analysis - Instant processing of 170K+ flows
-✅ Smart Feature Matching - Handles messy real-world data
-✅ Production-Ready Design - Redundant, scalable, enterprise-grade
+- ✅ Multi-Format Processing - CSV, PCAP, JSON, LOG support
+- ✅ Real-Time Analysis - Instant processing of 170K+ flows
+- ✅ Smart Feature Matching - Handles messy real-world data
+- ✅ Production-Ready Design - Redundant, scalable, enterprise-grade
 
 🛡️ Threat Coverage
 
-✅ 6 Attack Types Detected - DoS, DDoS, Port Scan, Brute Force, Web Attacks, Botnets
-✅ Unknown Threat Detection - Anomaly detection for zero-day attacks
-✅ Industry-Standard Performance - Comparable to commercial solutions (Darktrace, CrowdStrike)
+- ✅ 6 Attack Types Detected - DoS, DDoS, Port Scan, Brute Force, Web Attacks, Botnets
+- ✅ Unknown Threat Detection - Anomaly detection for zero-day attacks
+- ✅ Industry-Standard Performance - Comparable to commercial solutions (Darktrace, CrowdStrike)
 
 
 ## 📚 Documentation
