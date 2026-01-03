@@ -2,7 +2,7 @@
 
 Multi-Strategy Detection | 6 AI Models | 99.92% Accuracy
 
-### 👥 Group — Tanya · Bibek · Chris · Sangam  
+### 👥 Group — Tanya · Bibek  · Chris · Sangam  
 
 ## 🎯 Project Overview
 
