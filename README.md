@@ -1,6 +1,6 @@
 # 🛡️ AI Network Anomaly Detection System
 
-Multi-Strategy Detection | 6 AI Models | 99.92% Accuracy
+Multi-Strategy Detection with 99.92% Accuracy
 
 ### 👥 Group — Tanya · Bibek  · Chris · Sangam  
 
@@ -8,13 +8,6 @@ Multi-Strategy Detection | 6 AI Models | 99.92% Accuracy
 
 An AI-powered network intrusion detection system that analyzes network traffic in real-time to identify cyber threats with 99.92% accuracy.
 
-**Key Features:**
-- ✅ 99.92% Detection Accuracy (XGBoost)
-- ✅ 6 Attack Types Detection
-- ✅ Zero-Day Attack Capability
-- ✅ Multi-Format Support (CSV, PCAP, JSON, LOG)
-- ✅ Real-time Analysis
-- ✅ Production-Ready Architecture
 
 ## 📊 Three Detection Strategies
 
@@ -36,60 +29,53 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 ## 🚀 Live Demo
 
 **Network Traffic Analysis**:
-<img width="2875" height="1635" alt="image" src="https://github.com/user-attachments/assets/538b7279-4303-419c-9729-e3d222ea42d3" />
+<img width="2879" height="1599" alt="image" src="https://github.com/user-attachments/assets/7f5c20e1-f931-4fb5-ad8e-b90fd495f5a1" />
 
 **File Uploaded**:
-<img width="2879" height="1638" alt="image" src="https://github.com/user-attachments/assets/1692d82d-7306-45cd-bd64-187f62df5e57" />
-<img width="2879" height="1634" alt="image" src="https://github.com/user-attachments/assets/61dd938b-2481-47f1-aa7e-8bf28087a3a2" />
+<img width="2879" height="1611" alt="image" src="https://github.com/user-attachments/assets/590542ff-adb2-42f6-b30f-2e2dab94b1fb" />
+<img width="2879" height="1607" alt="image" src="https://github.com/user-attachments/assets/1d3c6583-8abb-4627-a1d3-0d1d16489d19" />
 
 **Analysis in progress**:
 
 **Bar Chart**:
-<img width="2879" height="1615" alt="image" src="https://github.com/user-attachments/assets/be023d5e-973d-481a-a6f3-9c8816dbc5df" />
+<img width="2879" height="1616" alt="image" src="https://github.com/user-attachments/assets/8dc2acea-b61f-4210-b2bc-31ad2e800bce" />
+<img width="2506" height="676" alt="image" src="https://github.com/user-attachments/assets/b08c6b66-1508-4695-8fb0-69640ea76edb" />
 
 **Pie Chart**:
-<img width="2879" height="1619" alt="image" src="https://github.com/user-attachments/assets/bc83b0cb-6274-4909-a77e-b2562f2f183b" />
+<img width="2878" height="1441" alt="image" src="https://github.com/user-attachments/assets/538b18f0-a6cd-4574-994c-a982476cb449" />
+<img width="2460" height="688" alt="image" src="https://github.com/user-attachments/assets/ddf5aef4-2488-4a95-ba87-380d27a94ed2" />
 
 **Both Charts**:
-<img width="2875" height="1608" alt="image" src="https://github.com/user-attachments/assets/778bd725-87b0-4f03-8a7e-be211ca91da5" />
+<img width="2879" height="1439" alt="image" src="https://github.com/user-attachments/assets/8ee41cbb-a971-4698-a407-f717bb32b500" />
+<img width="2449" height="619" alt="image" src="https://github.com/user-attachments/assets/2677b8c9-05e8-4fe0-b8d3-38bc3f66a08f" />
 
 **Interactive Dashboard Analysis**
-<img width="2877" height="1614" alt="image" src="https://github.com/user-attachments/assets/d2f145ca-7f70-45af-a8ec-d3a5ab1c72e2" />
-<img width="2879" height="1624" alt="image" src="https://github.com/user-attachments/assets/36c17ea4-d7f7-4e08-92ba-47379866b52d" />
+<img width="2876" height="1226" alt="image" src="https://github.com/user-attachments/assets/d8b1868a-c88b-463b-8674-59a256e31e64" />
+<img width="2494" height="982" alt="image" src="https://github.com/user-attachments/assets/3a23df42-9d47-44cb-8879-6a98e42d7098" />
+<img width="2466" height="895" alt="image" src="https://github.com/user-attachments/assets/e5e36b3c-bf64-482c-98b2-285b586d644d" />
 
 **Model Comparisons and Insights**
-<img width="2879" height="1483" alt="image" src="https://github.com/user-attachments/assets/97ac8b06-e51f-4fd4-8d34-faee2bb4c1fa" />
+<img width="2879" height="1424" alt="image" src="https://github.com/user-attachments/assets/366deb00-d477-4d33-9c76-ddad55f5b4a6" />
 
 **All Individual Model Results**
-<img width="2877" height="1539" alt="image" src="https://github.com/user-attachments/assets/907170c7-9800-4c3f-a580-834e71ffbf8e" />
+<img width="2461" height="458" alt="image" src="https://github.com/user-attachments/assets/1521486f-5ca6-4dbe-9570-6e5f125c5403" />
 
 **Individual Model Results - Web Attacks (specific)**
-<img width="2877" height="1603" alt="image" src="https://github.com/user-attachments/assets/3f8ba6c7-3d2f-450a-a5b0-0a3f4dba3f4f" />
+<img width="2499" height="1208" alt="image" src="https://github.com/user-attachments/assets/0120374e-4e79-4496-8d6c-25642e1605a8" />
 
 **Individual Model Results - Port Scanning (specific)**
-<img width="2879" height="1613" alt="image" src="https://github.com/user-attachments/assets/4941af1d-9cea-404c-a01b-faade6579922" />
+<img width="2474" height="1168" alt="image" src="https://github.com/user-attachments/assets/8b10b5f5-a95b-4eb7-a228-8736a59c8f76" />
 
 **Individual Model Results - DoS (specific)**
-<img width="2871" height="1623" alt="image" src="https://github.com/user-attachments/assets/62cb97c8-224e-4dc6-bb34-adcf4f99155e" />
+<img width="2475" height="1158" alt="image" src="https://github.com/user-attachments/assets/b805f081-b145-4041-ac3f-198ad37ddc70" />
 
 **Analysis History**
-<img width="2879" height="1626" alt="image" src="https://github.com/user-attachments/assets/6360bef2-1a2c-4596-96f6-069670ec6527" />
+<img width="2879" height="1573" alt="image" src="https://github.com/user-attachments/assets/964b9b22-2128-4e39-a039-2bf9f2f61695" />
 
 **About**
-<img width="2879" height="1612" alt="image" src="https://github.com/user-attachments/assets/f6541e9f-a45b-4d33-9e2f-7f696e10c64f" />
-<img width="2879" height="1275" alt="image" src="https://github.com/user-attachments/assets/f44b7802-315f-4c94-af92-c84dfbc6474a" />
-<img width="2879" height="1453" alt="image" src="https://github.com/user-attachments/assets/d4c64073-4506-4fa7-adfe-b8895b9bdb97" />
-<img width="2879" height="1422" alt="image" src="https://github.com/user-attachments/assets/23ec07ec-4414-4119-b2f8-890d874fa862" />
-<img width="2502" height="733" alt="image" src="https://github.com/user-attachments/assets/513a019a-1efe-4406-b143-3aa1b48fe39a" />
+<img width="2879" height="1351" alt="image" src="https://github.com/user-attachments/assets/4fab1519-26bc-4657-b1a4-58302ea1c5b6" />
+<img width="2451" height="1096" alt="image" src="https://github.com/user-attachments/assets/4e5f17ad-29b0-48ec-a384-25dc688e7554" />
 
-
-## 💻 Technical Stack
-
-- **Hardware**: Dell Pro Max GB10 with NVIDIA Blackwell GPU
-- **Dataset**: CICIDS2017 (2.5M samples, 52 features)
-- **Languages**: Python 3.12
-- **Frameworks**: TensorFlow, scikit-learn, XGBoost, LightGBM
-- **Interface**: Streamlit + Plotly
 
 ## 👥 Team
 
@@ -104,14 +90,36 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 
 - **Institution**: Metropolia University of Applied Sciences
 - **Program**: IoT Network Security
-- **Duration**: 6 months (2025)
+- **Duration**: 6 months (2025-2026)
 
 ## 🔬 Key Achievements
 
-1. **Novel Discovery**: DoS 210× amplification pattern
-2. **Production Architecture**: Ensemble redundancy system
-3. **Zero-Day Detection**: Handles unknown attacks
-4. **Multi-Format Support**: CSV, PCAP, JSON, LOG files
+🎯 Performance Metrics
+
+✅ 99.92% Accuracy - Industry-leading detection rate (XGBoost)
+✅ 99.86% Ensemble Accuracy - Multi-model voting system
+✅ <2% False Positives - Minimizes alert fatigue
+✅ 5-Minute Training - Complete pipeline on 2.5M samples
+
+🔬 Research Innovation
+
+✅ Novel DoS Pattern Discovery - Identified 210× amplification signature
+✅ Zero-Day Detection - 97.73% accuracy on unknown attacks
+✅ Three-Strategy Architecture - Supervised + Unsupervised + Ensemble
+
+🚀 Technical Capabilities
+
+✅ Multi-Format Processing - CSV, PCAP, JSON, LOG support
+✅ Real-Time Analysis - Instant processing of 170K+ flows
+✅ Smart Feature Matching - Handles messy real-world data
+✅ Production-Ready Design - Redundant, scalable, enterprise-grade
+
+🛡️ Threat Coverage
+
+✅ 6 Attack Types Detected - DoS, DDoS, Port Scan, Brute Force, Web Attacks, Botnets
+✅ Unknown Threat Detection - Anomaly detection for zero-day attacks
+✅ Industry-Standard Performance - Comparable to commercial solutions (Darktrace, CrowdStrike)
+
 
 ## 📚 Documentation
 
@@ -132,6 +140,7 @@ Currently running at: `http://100.90.12.111:8503`
 - **GPU**: NVIDIA Blackwell GB10
 - **RAM**: 128GB
 - **Storage**: 3.58TB
+- **Training Time**: 5 minutes
 
 ### Software Stack
 - **Language**: Python 3.12
