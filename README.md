@@ -2,8 +2,6 @@
 
 Multi-Strategy Detection | 6 AI Models | 99.92% Accuracy
 
-[Add your main demo screenshot here]
-
 ## 🎯 Project Overview
 
 An AI-powered network intrusion detection system that analyzes network traffic in real-time to identify cyber threats with 99.92% accuracy.
@@ -83,7 +81,6 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 <img width="2502" height="733" alt="image" src="https://github.com/user-attachments/assets/513a019a-1efe-4406-b143-3aa1b48fe39a" />
 
 
-
 ## 💻 Technical Stack
 
 - **Hardware**: Dell Pro Max GB10 with NVIDIA Blackwell GPU
@@ -107,10 +104,6 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 - **Program**: IoT Network Security
 - **Duration**: 6 months (2025)
 
-## 📈 Results
-
-[Add your results screenshots]
-
 ## 🔬 Key Achievements
 
 1. **Novel Discovery**: DoS 210× amplification pattern
@@ -120,28 +113,36 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 
 ## 📚 Documentation
 
-- [Full Presentation](docs/presentation/midway-presentation.pdf)
-- [Screenshots](docs/screenshots/)
-- [Architecture Diagrams](docs/architecture/)
+- [Full Presentation](https://gamma.app/docs/AI-Network-Anomaly-Detection-System-8wkj4bqg6yve4z5)
 
-## 🛠️ Installation
-```bash
-# Clone repository
-git clone https://github.com/YOUR-USERNAME/AI-Network-Anomaly-Detection.git
+## 🌐 Quick Access
 
-# Navigate to directory
-cd AI-Network-Anomaly-Detection
+### Live Demo
+Currently running at: `http://100.90.12.111:8503`
+*(Metropolia network only)*
 
-# Install dependencies
-pip install -r requirements.txt
+---
 
-# Run the application
-streamlit run src/demo_app.py
-```
+## 💻 Technical Specifications
 
-## 📝 License
+### Hardware
+- **Server**: Dell Pro Max GB10
+- **GPU**: NVIDIA Blackwell GB10
+- **RAM**: 128GB
+- **Storage**: 3.58TB
 
-MIT License - See [LICENSE](LICENSE) file
+### Software Stack
+- **Language**: Python 3.12
+- **Framework**: Streamlit 1.28+
+- **ML Libraries**: scikit-learn, XGBoost, LightGBM, TensorFlow
+- **Visualization**: Plotly
+
+### Dataset
+- **Name**: CICIDS2017
+- **Size**: 2.5M network flows
+- **Features**: 52 network statistics
+- **Classes**: 7 (6 attack types + normal)
+
 
 ## 🙏 Acknowledgments
 
