@@ -128,7 +128,7 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 ## 🌐 Quick Access
 
 ### Live Demo
-Currently running at: `http://100.90.12.111:8503`
+Currently running at: `http://100.90.12.111:8501`
 *(Metropolia network only)*
 
 ---
