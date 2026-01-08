@@ -103,8 +103,9 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 
 🔬 Research Innovation
 
-- ✅ Novel DoS Pattern Discovery - Identified 210× amplification signature
 - ✅ Three-Strategy Architecture - Supervised + Unsupervised + Ensemble
+- ✅ Multi-Model Ensemble - Weighted, majority, and confidence-based voting
+- ⚠️ Anomaly Detection Exploration - Autoencoder approach (97.73% on validation data)
 
 🚀 Technical Capabilities
 
@@ -115,17 +116,25 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 🛡️ Threat Coverage
 
 - ✅ 6 Attack Types Detected - DoS, DDoS, Port Scan, Brute Force, Web Attacks, Botnets
-- ✅ Unknown Threat Detection - Anomaly detection for zero-day attacks
-- ✅ Industry-Standard Performance - Comparable to commercial solutions (Darktrace, CrowdStrike)
 
 
-## 🔬 Lessons Learned & Limitations
+## 🔬 Lessons Learned & Real-World Limitations
 
-While achieving 99.92% accuracy on CICIDS2017 dataset:
-- ❌ Performance degraded significantly on real network traffic
+While achieving 99.92% accuracy on CICIDS2017 dataset in controlled testing:
+
+**Real-World Testing Results:**
+- ❌ Performance degraded significantly on live network traffic
 - ❌ Models struggled with attack patterns not represented in training data
-- ❌ Deterministic decision boundaries proved insufficient for adversarial environments
-- ✅ This revealed the critical need for uncertainty estimation and probabilistic approaches
+- ❌ High false positive rates in production-like environments
+- ❌ Deterministic decision boundaries proved insufficient for adversarial scenarios
+
+**Critical Insights:**
+- ✅ Lab accuracy ≠ Real-world robustness
+- ✅ Need for uncertainty quantification in security decisions
+- ✅ Importance of probabilistic approaches over deterministic thresholds
+- ✅ Gap between validation metrics and operational reliability
+
+**This project revealed fundamental challenges in deploying ML for cybersecurity, motivating further research in adversarial robustness, uncertainty estimation, and trustworthy AI systems.**
 
 **Key Insight:** Lab accuracy ≠ Real-world robustness
 
@@ -157,10 +166,11 @@ Currently running at: `http://100.90.12.111:8501`
 - **Visualization**: Plotly
 
 ### Dataset
-- **Name**: CICIDS2017
+- **Primary Dataset**: CICIDS2017
 - **Size**: 2.5M network flows
 - **Features**: 52 network statistics
 - **Classes**: 7 (6 attack types + normal)
+- **Note**: Limited to historical attack patterns from 2017
 
 
 ## 🙏 Acknowledgments
