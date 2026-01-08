@@ -104,7 +104,6 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 🔬 Research Innovation
 
 - ✅ Novel DoS Pattern Discovery - Identified 210× amplification signature
-- ✅ Zero-Day Detection - 97.73% accuracy on unknown attacks
 - ✅ Three-Strategy Architecture - Supervised + Unsupervised + Ensemble
 
 🚀 Technical Capabilities
@@ -112,7 +111,6 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 - ✅ Multi-Format Processing - CSV, PCAP, JSON, LOG support
 - ✅ Real-Time Analysis - Instant processing of 170K+ flows
 - ✅ Smart Feature Matching - Handles messy real-world data
-- ✅ Production-Ready Design - Redundant, scalable, enterprise-grade
 
 🛡️ Threat Coverage
 
@@ -120,6 +118,16 @@ An AI-powered network intrusion detection system that analyzes network traffic i
 - ✅ Unknown Threat Detection - Anomaly detection for zero-day attacks
 - ✅ Industry-Standard Performance - Comparable to commercial solutions (Darktrace, CrowdStrike)
 
+
+## 🔬 Lessons Learned & Limitations
+
+While achieving 99.92% accuracy on CICIDS2017 dataset:
+- ❌ Performance degraded significantly on real network traffic
+- ❌ Models struggled with attack patterns not represented in training data
+- ❌ Deterministic decision boundaries proved insufficient for adversarial environments
+- ✅ This revealed the critical need for uncertainty estimation and probabilistic approaches
+
+**Key Insight:** Lab accuracy ≠ Real-world robustness
 
 ## 📚 Documentation
 
