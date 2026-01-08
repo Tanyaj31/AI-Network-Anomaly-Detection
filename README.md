@@ -167,7 +167,6 @@ Currently running at: `http://100.90.12.111:8501`
 
 ### Datasets
 - **CICIDS2017**: Network traffic data (2017), 52 features, 7 classes (6 attack types + normal)
-- **UNSW-NB15**: Network traffic data (2015), additional attack patterns
 - **Combined Size**: 2.5M+ network flows processed
 - **Training Focus**: Historical attack patterns from controlled environments
 - **Note**: Both datasets represent simulated/controlled traffic, not real-world production environments
