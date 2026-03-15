@@ -1,4 +1,4 @@
-# 🛡️ AI-Powered Network Intrusion Detection System (NIDS)
+# 🛡️ AI-Powered Network Anomaly Detection System 
 
 > Production-ready IoT Network Security capstone project — Metropolia University of Applied Sciences  
 > 6-month project | 4-member team | Parallel Learning Methodology
@@ -14,7 +14,7 @@
 
 ## 🎯 Project Summary
 
-A real-world AI-powered Network Intrusion Detection System (NIDS) built for IoT environments. The system uses a **three-layer detection architecture** combining unsupervised anomaly detection and supervised ensemble classification to achieve **99.92% accuracy** on real cybersecurity datasets.
+A real-world AI-powered Network Anomaly Detection System ( built for IoT environments. The system uses a **three-layer detection architecture** combining unsupervised anomaly detection and supervised ensemble classification to achieve **99.92% accuracy** on real cybersecurity datasets.
 
 The project follows a **parallel learning** approach — all 4 team members gained hands-on experience across every component (ML training, backend, dashboard, edge devices) rather than siloing into specializations.
 
