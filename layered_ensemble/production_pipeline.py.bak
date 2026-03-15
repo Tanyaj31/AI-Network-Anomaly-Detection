@@ -1,0 +1,540 @@
+import numpy as np
+import pandas as pd
+import pickle
+import json
+import os
+from datetime import datetime
+from typing import Dict, List, Tuple, Optional
+from collections import Counter
+import warnings
+warnings.filterwarnings('ignore')
+
+import sys
+import os
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+if CURRENT_DIR not in sys.path:
+    sys.path.insert(0, CURRENT_DIR)
+
+from config import *
+from model_loader import ModelLoader
+
+
+# ============================================================================
+# LAYER 0: UNSUPERVISED ANOMALY DETECTION
+# ============================================================================
+
+class Layer0_UnsupervisedFilter:
+    """
+    Zero-Day Attack Detection using CICIDS Autoencoder.
+    Trained ONLY on normal traffic — flags anything unusual.
+    NOT a final verdict, just a first-pass signal.
+    """
+    
+    def __init__(self, loader: ModelLoader):
+        self.loader = loader
+        self.models = {
+            'cicids': loader.cicids_models.get('autoencoder'),
+        }
+        self.thresholds = {
+            'cicids': loader.cicids_models.get('autoencoder_threshold'),
+        }
+        self.scalers = {
+            'cicids': loader.scalers.get('cicids_unsupervised'),
+        }
+        
+    def predict(self, cicids_features: np.ndarray) -> Dict:
+        results = {}
+        confidence = 0.0
+        
+        if self.models['cicids'] is not None:
+            cicids_scaled = self.scalers['cicids'].transform(cicids_features.reshape(1, -1))
+            cicids_recon = self.models['cicids'].predict(cicids_scaled, verbose=0)
+            cicids_error = np.mean(np.abs(cicids_scaled - cicids_recon))
+            cicids_is_anomaly = cicids_error > self.thresholds['cicids']
+            
+            results['cicids_score'] = float(cicids_error)
+            results['cicids_threshold'] = float(self.thresholds['cicids'])
+            results['is_anomaly'] = bool(cicids_is_anomaly)
+            
+            if cicids_is_anomaly:
+                confidence = min(((cicids_error / self.thresholds['cicids']) - 1.0) * 100, 100.0)
+            else:
+                confidence = 0.0
+        
+        return {
+            'is_anomaly': results.get('is_anomaly', False),
+            'cicids_score': results.get('cicids_score', 0.0),
+            'cicids_threshold': results.get('cicids_threshold', 0.0),
+            'confidence': confidence
+        }
+
+
+# ============================================================================
+# LAYER 1: SUPERVISED CLASSIFICATION (CONFIDENCE-WEIGHTED VOTING)
+# ============================================================================
+
+class Layer1_SupervisedClassifiers:
+    """
+    Attack Type Classification using 3 XGBoost Specialists.
+    THIS is the final decision maker — 99.92% accuracy ensemble.
+    
+    Voting Strategy: CONFIDENCE-WEIGHTED (unbiased)
+      - Each model contributes its confidence score
+      - attack_score = sum of confidences from models that say attack
+      - normal_score = sum of confidences from models that say normal
+      - Winner = highest total score
+      - Pure ensemble, no domain bias, works on any network type
+    
+    Example:
+      CICIDS Normal 100% + UNSW Normal 99.9% = 1.999 normal_score
+      IoT Attack 71.9%                       = 0.719 attack_score
+      Winner: Normal (1.999 > 0.719)
+    """
+    
+    def __init__(self, loader: ModelLoader):
+        self.loader = loader
+        self.models = {
+            'cicids': loader.cicids_models.get('xgboost'),
+            'iot': loader.iot_models.get('xgboost'),
+            'unsw': loader.unsw_models.get('xgboost')
+        }
+        self.scalers = {
+            'cicids': loader.scalers.get('cicids'),
+            'iot': loader.scalers.get('iot'),
+            'unsw': loader.scalers.get('unsw')
+        }
+        self.encoders = {
+            'cicids': loader.encoders.get('cicids'),
+            'iot': loader.encoders.get('iot'),
+            'unsw': loader.encoders.get('unsw')
+        }
+        
+    def predict(self, cicids_features: np.ndarray, iot_features: np.ndarray, 
+                unsw_features: np.ndarray, raw_features: Dict = None) -> Dict:
+        """
+        Run all 3 specialists and combine via confidence-weighted voting.
+        """
+        all_predictions = []
+        
+        # ── CICIDS XGBoost ────────────────────────────────────────────────
+        cicids_scaled = self.scalers['cicids'].transform(cicids_features.reshape(1, -1))
+        cicids_pred = self.models['cicids'].predict(cicids_scaled)[0]
+        cicids_proba = self.models['cicids'].predict_proba(cicids_scaled)[0]
+        cicids_label = self.encoders['cicids'].inverse_transform([cicids_pred])[0]
+        cicids_conf = float(np.max(cicids_proba))
+        
+        all_predictions.append({
+            'specialist': 'CICIDS_XGBoost',
+            'prediction': cicids_label,
+            'confidence': cicids_conf,
+            'is_attack': cicids_label.lower() not in ['normal', 'normal traffic', 'benign']
+        })
+        
+        # ── IoT XGBoost ───────────────────────────────────────────────────
+        iot_scaled = self.scalers['iot'].transform(iot_features.reshape(1, -1))
+        iot_pred = self.models['iot'].predict(iot_scaled)[0]
+        iot_proba = self.models['iot'].predict_proba(iot_scaled)[0]
+        iot_label = self.encoders['iot'].inverse_transform([iot_pred])[0]
+        iot_conf = float(np.max(iot_proba))
+        
+        all_predictions.append({
+            'specialist': 'IoT_XGBoost',
+            'prediction': iot_label,
+            'confidence': iot_conf,
+            'is_attack': iot_label.lower() not in ['normal', 'normal traffic', 'benign']
+        })
+        
+        # ── UNSW XGBoost ──────────────────────────────────────────────────
+        unsw_scaled = self.scalers['unsw'].transform(unsw_features.reshape(1, -1))
+        unsw_pred = self.models['unsw'].predict(unsw_scaled)[0]
+        unsw_proba = self.models['unsw'].predict_proba(unsw_scaled)[0]
+        unsw_label = self.encoders['unsw'].inverse_transform([unsw_pred])[0]
+        unsw_conf = float(np.max(unsw_proba))
+        
+        all_predictions.append({
+            'specialist': 'UNSW_XGBoost',
+            'prediction': unsw_label,
+            'confidence': unsw_conf,
+            'is_attack': unsw_label.lower() not in ['normal', 'normal traffic', 'benign']
+        })
+        
+        # ── CONFIDENCE-WEIGHTED VOTING ────────────────────────────────────
+        attack_score = sum(p['confidence'] for p in all_predictions if p['is_attack'])
+        normal_score = sum(p['confidence'] for p in all_predictions if not p['is_attack'])
+        attack_votes = sum(1 for p in all_predictions if p['is_attack'])
+        
+        if attack_score > normal_score:
+            # Attack wins — pick highest confidence attacker
+            attack_predictions = [p for p in all_predictions if p['is_attack']]
+            winner = max(attack_predictions, key=lambda x: x['confidence'])
+            ensemble_decision = winner['prediction']
+            ensemble_conf = winner['confidence']
+            is_attack = True
+        else:
+            # Normal wins — pick highest confidence normal
+            normal_predictions = [p for p in all_predictions if not p['is_attack']]
+            if normal_predictions:
+                winner = max(normal_predictions, key=lambda x: x['confidence'])
+                ensemble_decision = "Normal Traffic"
+                ensemble_conf = winner['confidence']
+            else:
+                # Edge case: all voted attack but score lost (shouldn't happen)
+                winner = max(all_predictions, key=lambda x: x['confidence'])
+                ensemble_decision = winner['prediction']
+                ensemble_conf = winner['confidence']
+            is_attack = False
+        
+        return {
+            'attack_type': ensemble_decision,
+            'confidence': ensemble_conf,
+            'is_attack': is_attack,
+            'attack_votes': attack_votes,
+            'attack_score': attack_score,
+            'normal_score': normal_score,
+            'all_predictions': all_predictions
+        }
+
+
+# ============================================================================
+# LAYER 2: HUMAN REVIEW & ACTIVE LEARNING
+# ============================================================================
+
+class Layer2_HumanReview:
+    """
+    Human-in-the-loop for genuinely uncertain cases ONLY.
+
+    Decision Matrix:
+      L0 Normal  + L1 Normal  → ✅ Normal  (no review)
+      L0 Anomaly + L1 Normal  → ✅ Normal  (L1 wins, no review)
+      L0 Normal  + L1 Attack  → 🔴 Attack  (no review)
+      L0 Anomaly + L1 Attack  → 🔴 Attack  (no review)
+
+    Review ONLY when L1 confidence is genuinely low:
+      • L1 conf < 0.50  (model barely guessing)
+      • attack_votes == 1 AND conf < 0.60 (weak signal)
+    """
+    
+    def __init__(self, review_dir: str = None):
+        self.review_dir = review_dir or PRODUCTION['review_dir']
+        os.makedirs(self.review_dir, exist_ok=True)
+        
+    def needs_review(self, layer0_result: Dict, layer1_result: Dict) -> bool:
+        """
+        Determine if a flow needs human review.
+        
+        Triggers when:
+        1. L1 confidence < 50% (model barely guessing)
+        2. L0 anomaly + L1 attack = unfamiliar pattern classified as attack
+           (could be wrong - e.g., MQTT classified as DDoS)
+        
+        Does NOT trigger when:
+        - L0 normal + L1 attack = familiar attack pattern (trust L1) ✅
+        - L0 anomaly + L1 normal = unfamiliar but benign (trust L1) ✅
+        
+        Rationale:
+        - L0 normal = traffic pattern exists in training data
+        - L0 anomaly = traffic pattern unfamiliar/not in training
+        - When L0 says "unfamiliar" + L1 says "attack", model might be
+          forcing unknown data into wrong class → human should verify
+        """
+        l1_conf = layer1_result['confidence']
+        l1_attack = layer1_result['is_attack']
+        l0_anomaly = layer0_result['is_anomaly']
+
+        # Case 1: Model is barely guessing
+        if l1_conf < 0.50:
+            return True
+
+        # Case 2: Unfamiliar pattern (L0 anomaly) classified as attack
+        # L0 normal + L1 attack = familiar attack, trust it ✅
+        # L0 anomaly + L1 attack = unfamiliar, needs review ⚠️
+        if l0_anomaly and l1_attack:
+            return True
+
+        # Everything else: Trust L1
+        return False
+
+
+# ============================================================================
+# ANALYSIS RESULT BUILDER
+# ============================================================================
+
+def build_analysis_result(layer0_result: Dict, layer1_result: Dict) -> Dict:
+    """
+    Build final analysis result.
+
+    KEY PRINCIPLE: Layer 1 is the final decision maker.
+    Layer 0 is just a supporting signal — it flags 40%+ of traffic
+    including normal flows it hasn't seen. It should NEVER override L1.
+    
+    IMPORTANT: When confidence is very low (<50%), don't show guessed
+    attack names as if they're real — label as "Uncertain" instead.
+    """
+    layer0_anomaly = layer0_result['is_anomaly']
+    layer1_attack  = layer1_result['is_attack']
+    layer1_conf    = layer1_result['confidence']
+    attack_votes   = layer1_result['attack_votes']
+
+    # ── CASE 1: Model is barely guessing (< 50% confidence) ───────────
+    # Don't trust the classification — send to human review
+    if layer1_conf < 0.50:
+        classification = 'Uncertain - Needs Review'
+        is_attack = False  # Don't treat as confirmed attack
+        threat_level = 'INFO'
+        needs_review = True
+    
+    # ── CASE 2: Confident attack (≥ 50% confidence) ───────────────────
+    elif layer1_attack:
+        classification = layer1_result['attack_type']
+        is_attack = True
+        needs_review = False
+
+        # Threat level based on confidence + vote consensus
+        if layer1_conf >= 0.90 or attack_votes == 3:
+            threat_level = 'HIGH'
+        elif layer1_conf >= 0.70 or attack_votes == 2:
+            threat_level = 'MEDIUM'
+        else:
+            threat_level = 'LOW'
+
+    # ── CASE 3: Confident normal (≥ 50% confidence) ───────────────────
+    else:
+        is_attack = False
+    
+        if layer0_anomaly:
+            classification = 'Anomaly - Needs Review'
+            threat_level = 'INFO'
+            needs_review = True
+        else:
+            classification = 'Normal Traffic'
+            threat_level = 'NONE'
+            needs_review = False
+
+    return {
+        'classification': classification,
+        'is_attack': is_attack,
+        'threat_level': threat_level,
+        'confidence': layer1_conf,
+        'needs_review': needs_review,
+        'attack_votes': attack_votes,
+        'layer0_flagged': layer0_anomaly,
+    }
+
+
+# ============================================================================
+# COMPLETE PRODUCTION PIPELINE
+# ============================================================================
+
+class ProductionPipeline:
+    """
+    Complete 3-Layer Network IDS Pipeline
+
+    Usage:
+        pipeline = ProductionPipeline()
+        pipeline.load_models()
+        results = pipeline.analyze_batch(cicids_batch, iot_batch, unsw_batch)
+    """
+    
+    def __init__(self):
+        self.loader = None
+        self.layer0 = None
+        self.layer1 = None
+        self.layer2 = None
+        self.stats = {
+            'total_analyzed': 0,
+            'layer0_flagged': 0,
+            'layer1_attacks': 0,
+            'normal_traffic': 0
+        }
+    
+    def clean_features(self, X):
+        """Clean features to handle infinity/NaN/extreme values"""
+        if isinstance(X, np.ndarray):
+            X = pd.DataFrame(X)
+        X = X.replace([np.inf, -np.inf], np.nan)
+        X = X.fillna(0)
+        for col in X.columns:
+            X[col] = X[col].clip(lower=-1e10, upper=1e10)
+        X = X.astype('float32')
+        return X.values
+        
+    def load_models(self):
+        """Load all models"""
+        print("=" * 70)
+        print("🚀 INITIALIZING PRODUCTION PIPELINE")
+        print("=" * 70)
+        
+        self.loader = ModelLoader()
+        self.loader.load_all()
+        
+        self.layer0 = Layer0_UnsupervisedFilter(self.loader)
+        self.layer1 = Layer1_SupervisedClassifiers(self.loader)
+        self.layer2 = Layer2_HumanReview()
+        
+        print("\n✅ Production pipeline ready!")
+        print("   ⚡ Layer 0: CICIDS Autoencoder (zero-day signal)")
+        print("   ⚡ Layer 1: 3 XGBoost (confidence-weighted voting)")
+        print("   ⚡ Layer 2: Human Review (strict threshold)")
+        print("=" * 70)
+    
+    def analyze_batch(self, cicids_batch: np.ndarray, iot_batch: np.ndarray, 
+                      unsw_batch: np.ndarray) -> List[Dict]:
+        """
+        Batch processing: analyze multiple flows at once.
+        
+        Args:
+            cicids_batch: (N, 52) CICIDS features
+            iot_batch:    (N, 39) IoT features
+            unsw_batch:   (N, 48) UNSW features
+        
+        Returns:
+            List of N result dictionaries
+        """
+        batch_size = len(cicids_batch)
+        results = []
+        
+        # ── Clean features ────────────────────────────────────────────────
+        cicids_batch = self.clean_features(cicids_batch)
+        iot_batch    = self.clean_features(iot_batch)
+        unsw_batch   = self.clean_features(unsw_batch)
+        
+        # ── Layer 0: Unsupervised (batch) ─────────────────────────────────
+        cicids_scaled = self.layer0.scalers['cicids'].transform(cicids_batch)
+        cicids_scaled = np.nan_to_num(cicids_scaled, nan=0.0, posinf=0.0, neginf=0.0)
+        cicids_scaled = np.clip(cicids_scaled, -1e6, 1e6).astype('float32')
+        
+        cicids_recon    = self.layer0.models['cicids'].predict(cicids_scaled, verbose=0)
+        cicids_errors   = np.mean(np.abs(cicids_scaled - cicids_recon), axis=1)
+        cicids_anomalies = cicids_errors > self.layer0.thresholds['cicids']
+        
+        # ── Layer 1: Supervised (batch) ───────────────────────────────────
+        cicids_scaled_l1 = self.layer1.scalers['cicids'].transform(cicids_batch)
+        iot_scaled       = self.layer1.scalers['iot'].transform(iot_batch)
+        unsw_scaled      = self.layer1.scalers['unsw'].transform(unsw_batch)
+        
+        cicids_scaled_l1 = np.nan_to_num(cicids_scaled_l1, nan=0.0, posinf=0.0, neginf=0.0)
+        cicids_scaled_l1 = np.clip(cicids_scaled_l1, -1e6, 1e6).astype('float32')
+        iot_scaled       = np.nan_to_num(iot_scaled, nan=0.0, posinf=0.0, neginf=0.0)
+        iot_scaled       = np.clip(iot_scaled, -1e6, 1e6).astype('float32')
+        unsw_scaled      = np.nan_to_num(unsw_scaled, nan=0.0, posinf=0.0, neginf=0.0)
+        unsw_scaled      = np.clip(unsw_scaled, -1e6, 1e6).astype('float32')
+        
+        cicids_preds  = self.layer1.models['cicids'].predict(cicids_scaled_l1)
+        cicids_probas = self.layer1.models['cicids'].predict_proba(cicids_scaled_l1)
+        iot_preds     = self.layer1.models['iot'].predict(iot_scaled)
+        iot_probas    = self.layer1.models['iot'].predict_proba(iot_scaled)
+        unsw_preds    = self.layer1.models['unsw'].predict(unsw_scaled)
+        unsw_probas   = self.layer1.models['unsw'].predict_proba(unsw_scaled)
+        
+        # ── Per-flow results ──────────────────────────────────────────────
+        for i in range(batch_size):
+            self.stats['total_analyzed'] += 1
+            
+            # Layer 0 result
+            layer0_result = {
+                'is_anomaly':        bool(cicids_anomalies[i]),
+                'cicids_score':      float(cicids_errors[i]),
+                'cicids_threshold':  float(self.layer0.thresholds['cicids'])
+            }
+            if cicids_anomalies[i]:
+                self.stats['layer0_flagged'] += 1
+            
+            # Decode L1 labels
+            cicids_label = self.layer1.encoders['cicids'].inverse_transform([cicids_preds[i]])[0]
+            iot_label    = self.layer1.encoders['iot'].inverse_transform([iot_preds[i]])[0]
+            unsw_label   = self.layer1.encoders['unsw'].inverse_transform([unsw_preds[i]])[0]
+            
+            cicids_conf = float(np.max(cicids_probas[i]))
+            iot_conf    = float(np.max(iot_probas[i]))
+            unsw_conf   = float(np.max(unsw_probas[i]))
+            
+            cicids_is_attack = cicids_label.lower() not in ['normal', 'normal traffic', 'benign']
+            iot_is_attack    = iot_label.lower()    not in ['normal', 'normal traffic', 'benign']
+            unsw_is_attack   = unsw_label.lower()   not in ['normal', 'normal traffic', 'benign']
+            
+            all_predictions = [
+                {'specialist': 'CICIDS_XGBoost', 'prediction': cicids_label,
+                 'confidence': cicids_conf, 'is_attack': cicids_is_attack},
+                {'specialist': 'IoT_XGBoost',    'prediction': iot_label,
+                 'confidence': iot_conf,    'is_attack': iot_is_attack},
+                {'specialist': 'UNSW_XGBoost',   'prediction': unsw_label,
+                 'confidence': unsw_conf,   'is_attack': unsw_is_attack},
+            ]
+            
+            # ── CONFIDENCE-WEIGHTED VOTING ────────────────────────────────
+            attack_score = sum(p['confidence'] for p in all_predictions if p['is_attack'])
+            normal_score = sum(p['confidence'] for p in all_predictions if not p['is_attack'])
+            attack_votes = sum(1 for p in all_predictions if p['is_attack'])
+            
+            if attack_score > normal_score:
+                # Attack wins
+                attack_preds      = [p for p in all_predictions if p['is_attack']]
+                winner            = max(attack_preds, key=lambda x: x['confidence'])
+                ensemble_decision = winner['prediction']
+                ensemble_conf     = winner['confidence']
+                is_attack         = True
+            else:
+                # Normal wins
+                normal_preds = [p for p in all_predictions if not p['is_attack']]
+                if normal_preds:
+                    winner = max(normal_preds, key=lambda x: x['confidence'])
+                    ensemble_decision = "Normal Traffic"
+                    ensemble_conf     = winner['confidence']
+                else:
+                    winner = max(all_predictions, key=lambda x: x['confidence'])
+                    ensemble_decision = winner['prediction']
+                    ensemble_conf     = winner['confidence']
+                is_attack = False
+            
+            layer1_result = {
+                'attack_type':     ensemble_decision,
+                'confidence':      ensemble_conf,
+                'is_attack':       is_attack,
+                'attack_votes':    attack_votes,
+                'attack_score':    attack_score,
+                'normal_score':    normal_score,
+                'all_predictions': all_predictions
+            }
+            
+            if is_attack:
+                self.stats['layer1_attacks'] += 1
+            else:
+                self.stats['normal_traffic'] += 1
+            
+            # Build final analysis
+            analysis      = build_analysis_result(layer0_result, layer1_result)
+            needs_review  = self.layer2.needs_review(layer0_result, layer1_result)
+            
+            results.append({
+                'timestamp':          datetime.now().isoformat(),
+                'layer0':             layer0_result,
+                'layer1':             layer1_result,
+                'analysis':           analysis,
+                'needs_human_review': needs_review
+            })
+        
+        return results
+    
+    def get_statistics(self) -> Dict:
+        """Get pipeline statistics"""
+        return {
+            'total_flows':      self.stats['total_analyzed'],
+            'layer0_flagged':   self.stats['layer0_flagged'],
+            'layer0_flag_rate': (self.stats['layer0_flagged'] / max(self.stats['total_analyzed'], 1)) * 100,
+            'attacks_detected': self.stats['layer1_attacks'],
+            'attack_rate':      (self.stats['layer1_attacks'] / max(self.stats['total_analyzed'], 1)) * 100,
+            'normal_traffic':   self.stats['normal_traffic'],
+            'normal_rate':      (self.stats['normal_traffic'] / max(self.stats['total_analyzed'], 1)) * 100
+        }
+
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+if __name__ == "__main__":
+    print("🛡️ Production Network IDS Pipeline")
+    pipeline = ProductionPipeline()
+    pipeline.load_models()
+    print("\n✅ Pipeline ready for batch analysis!")

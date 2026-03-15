@@ -1,0 +1,23 @@
+# AI Configuration
+gemini:
+  enabled: true
+  models:
+    fast: "gemini-1.5-flash"      # For quick analysis
+    powerful: "gemini-1.5-pro"     # For deep analysis
+  generation_config:
+    temperature: 0.3
+    max_output_tokens: 500
+    top_p: 0.8
+    top_k: 40
+  
+rate_limits:
+  enabled: true
+  storage: "memory"  # or "redis" for multi-user
+  limits:
+    per_minute: 60
+    per_day: 1500
+
+cache:
+  enabled: true
+  ttl: 3600  # 1 hour
+  max_size: 1000  # Max cached analyses

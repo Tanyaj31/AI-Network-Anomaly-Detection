@@ -1,0 +1,13 @@
+{
+  "total_analyzed": 262152,
+  "blocked": 0,
+  "passed": 0,
+  "under_review": 0,
+  "layer0_flagged": 0,
+  "layer1_attacks": 0,
+  "pass_rate": 0.0,
+  "block_rate": 0.0,
+  "review_rate": 0.0,
+  "layer0_flag_rate": 0.0,
+  "layer1_attack_rate": 0.0
+}

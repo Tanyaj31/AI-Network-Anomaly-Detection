@@ -1,0 +1,38 @@
+# Production Network IDS Dependencies
+# Python 3.8+
+
+# Core ML Libraries
+numpy>=1.21.0
+pandas>=1.3.0
+scikit-learn>=1.0.0
+tensorflow>=2.8.0
+keras>=2.8.0
+
+# Gradient Boosting
+xgboost>=1.5.0
+lightgbm>=3.3.0
+
+# Network Analysis
+scapy>=2.4.5
+
+# Utilities
+matplotlib>=3.4.0
+seaborn>=0.11.0
+plotly>=5.0.0
+
+# Web Interface (for demo)
+streamlit>=1.10.0
+
+# Progress bars
+tqdm>=4.62.0
+
+# JSON handling
+jsonlines>=2.0.0
+
+# System monitoring
+psutil>=5.8.0
+
+google-generativeai>=0.3.0
+python-dotenv>=1.0.0
+pyyaml>=6.0
+requests>=2.31.0

@@ -1,0 +1,60 @@
+# Large model files
+*.pkl
+*.joblib
+*.h5
+*.keras
+*.model
+*.bin
+*.pt
+*.pth
+
+# Datasets (too large)
+*.csv
+*.pcap
+*.pcapng
+*.zip
+*.gz
+*.tar
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.key
+
+# Huge dataset directories
+cic_iot_2023/
+bot_iot/
+cicds/
+UNSW_NB15/
+venv/
+synthetic_tests/
