@@ -8,7 +8,7 @@
 ## 📸 Dashboard Overview
 
 <!-- Screenshot: Full dashboard home page -->
-![Dashboard Overview](screenshots/dashboard_overview.png)
+![Dashboard Overview](Screenshots/Screenshot 2026-03-25 112454.png)
 
 ---
 
@@ -60,7 +60,7 @@ MQTT Broker ────────────►  │ UNSW XGBoost  (48 feat)
 ```
 
 <!-- Screenshot: Architecture diagram or live monitor showing detections -->
-![Architecture](screenshots/architecture.png)
+![Architecture](Screenshots/Screenshot 2026-03-13 100252.png)
 
 ---
 
