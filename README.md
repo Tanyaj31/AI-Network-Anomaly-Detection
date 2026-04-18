@@ -110,7 +110,7 @@ Built with **Streamlit**, the dashboard provides:
 - **Analyze** — Upload CSV/PCAP for offline batch analysis
 
 <!-- Screenshot: Live monitor tab showing active threats -->
-![Live Monitor](screenshots/live_monitor.png)
+![Live Monitor](https://github.com/Tanyaj31/AI-Network-Anomaly-Detection/blob/main/Screenshots/Screenshot%202026-03-15%20115058.png)
 
 <!-- Screenshot: Human review queue -->
 ![Review Queue](screenshots/review_queue.png)
