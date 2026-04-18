@@ -93,8 +93,6 @@ MQTT Broker ────────────►  │ UNSW XGBoost  (48 feat)
 | XGBoost | UNSW-NB15 | 97.20% |
 | Autoencoder | CICIDS2017 | 97.73% |
 
-<!-- Screenshot: Models page from dashboard showing confusion matrices or accuracy charts -->
-![Model Performance]()
 
 ---
 
