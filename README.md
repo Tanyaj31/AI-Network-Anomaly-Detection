@@ -113,7 +113,7 @@ Built with **Streamlit**, the dashboard provides:
 ![Live Monitor](https://github.com/Tanyaj31/AI-Network-Anomaly-Detection/blob/main/Screenshots/Screenshot%202026-03-15%20115058.png)
 
 <!-- Screenshot: Human review queue -->
-![Review Queue](screenshots/review_queue.png)
+![Review Queue](https://github.com/Tanyaj31/AI-Network-Anomaly-Detection/blob/main/Screenshots/Screenshot%202026-03-13%20100638.png)
 
 ---
 
