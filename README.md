@@ -60,7 +60,7 @@ MQTT Broker ────────────►  │ UNSW XGBoost  (48 feat)
 ```
 
 <!-- Screenshot: Architecture diagram or live monitor showing detections -->
-![Architecture](Screenshots/Screenshot 2026-03-13 100252.png)
+![Architecture](https://github.com/Tanyaj31/AI-Network-Anomaly-Detection/blob/main/Screenshots/Screenshot%202026-03-13%20100252.png)
 
 ---
 
