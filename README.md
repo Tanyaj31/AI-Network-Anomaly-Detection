@@ -8,7 +8,7 @@
 ## 📸 Dashboard Overview
 
 <!-- Screenshot: Full dashboard home page -->
-![Dashboard Overview](Screenshots/Screenshot 2026-03-25 112454.png)
+![Dashboard Overview](https://github.com/Tanyaj31/AI-Network-Anomaly-Detection/blob/main/Screenshots/Screenshot%202026-03-25%20112454.png)
 
 ---
 
@@ -94,7 +94,7 @@ MQTT Broker ────────────►  │ UNSW XGBoost  (48 feat)
 | Autoencoder | CICIDS2017 | 97.73% |
 
 <!-- Screenshot: Models page from dashboard showing confusion matrices or accuracy charts -->
-![Model Performance](screenshots/model_performance.png)
+![Model Performance]()
 
 ---
 
